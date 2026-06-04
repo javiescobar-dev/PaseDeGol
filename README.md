@@ -59,13 +59,13 @@ El proyecto está construido siguiendo las directrices de **Material Design** y 
 
 ## 📱 Capturas de Pantalla
 
-*(Reemplaza estos enlaces con las rutas de tus propias imágenes en la carpeta `/screenshots` del repositorio)*
-
 <p align="center">
-  <img src="ruta_a_tu_imagen/login.png" width="200" alt="Login">
-  <img src="ruta_a_tu_imagen/home.png" width="200" alt="Catálogo">
-  <img src="ruta_a_tu_imagen/cart.png" width="200" alt="Carrito">
-  <img src="ruta_a_tu_imagen/qr_ticket.png" width="200" alt="Entrada QR">
+  <img src="screenshots/login.jpg" width="200" alt="Login">
+  <img src="screenshots/catalogo.jpg" width="200" alt="Catálogo">
+  <img src="screenshots/carrito.jpg" width="200" alt="Carrito">
+  <img src="screenshots/entradas.jpg" width="200" alt="Entradas">
+  <img src="screenshots/entrada_qr.jpg" width="200" alt="Entrada QR">
+  <img src="screenshots/admin.jpg" width="200" alt="Panel de Administración">
 </p>
 
 ---
