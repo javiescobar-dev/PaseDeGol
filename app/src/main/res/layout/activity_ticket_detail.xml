@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="?attr/android:colorBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- toolbar verde con flecha de retroceso y el logo -->
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            android:background="@color/green_primary">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/green_primary"
+                app:title="Mi Entrada"
+                app:titleTextColor="@color/white"
+                app:navigationIcon="?attr/homeAsUpIndicator"
+                app:navigationIconTint="@color/white">
+
+                <!-- logo -->
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/ic_pasedegol"
+                    android:contentDescription="Logo de PaseDeGol" />
+
+            </com.google.android.material.appbar.MaterialToolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <!-- cabecera verde con escudos, fecha y estadio -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/green_primary"
+                android:paddingHorizontal="24dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="24dp">
+
+            <!-- escudo equipo local -->
+            <ImageView
+                    android:id="@+id/ivHomeBadge"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:contentDescription="Escudo equipo local"
+                    android:background="@drawable/bg_circle_white"
+                    android:padding="4dp"
+                    android:elevation="4dp"
+                    tools:src="@drawable/ic_pasedegol"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/layoutCenter"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- nombre equipo local -->
+            <TextView
+                android:id="@+id/tvHomeTeam"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textSize="13sp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:maxLines="2"
+                android:ellipsize="end"
+                tools:text="FC Barcelona"
+                app:layout_constraintStart_toStartOf="@id/ivHomeBadge"
+                app:layout_constraintEnd_toEndOf="@id/ivHomeBadge"
+                app:layout_constraintTop_toBottomOf="@id/ivHomeBadge" />
+
+            <!-- bloque central: hora, fecha y estadio -->
+            <LinearLayout
+                android:id="@+id/layoutCenter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <!-- hora -->
+                <TextView
+                    android:id="@+id/tvTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    tools:text="21:00" />
+
+                <!-- fecha -->
+                <TextView
+                    android:id="@+id/tvDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp"
+                    android:textColor="@color/white"
+                    tools:text="10 de Mayo" />
+
+                <!-- estadio -->
+                <TextView
+                    android:id="@+id/tvStadium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/green_light"
+                    android:textStyle="bold"
+                    tools:text="Camp Nou" />
+
+            </LinearLayout>
+
+            <!-- escudo equipo visitante -->
+            <ImageView
+                android:id="@+id/ivAwayBadge"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:contentDescription="Escudo equipo visitante"
+                android:background="@drawable/bg_circle_white"
+                android:padding="4dp"
+                android:elevation="4dp"
+                tools:src="@drawable/ic_pasedegol"
+                app:layout_constraintStart_toEndOf="@id/layoutCenter"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- nombre equipo visitante -->
+            <TextView
+                android:id="@+id/tvAwayTeam"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textSize="13sp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:maxLines="2"
+                android:ellipsize="end"
+                tools:text="Real Madrid"
+                app:layout_constraintStart_toStartOf="@id/ivAwayBadge"
+                app:layout_constraintEnd_toEndOf="@id/ivAwayBadge"
+                app:layout_constraintTop_toBottomOf="@id/ivAwayBadge" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- seccion de datos del ticket -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:gravity="center_horizontal">
+
+            <!-- cantidad de entradas -->
+            <TextView
+                android:id="@+id/tvQuantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="?attr/colorOnSurface"
+                tools:text="2 Entradas" />
+
+            <!-- precio total -->
+            <TextView
+                android:id="@+id/tvTotalPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnSurface"
+                tools:text="240,50 €" />
+
+            <!-- separador -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="16dp"
+                android:background="?attr/colorOnSurfaceVariant"
+                android:alpha="0.2" />
+
+            <!-- codigo QR -->
+            <ImageView
+                android:id="@+id/ivQrCode"
+                android:layout_width="220dp"
+                android:layout_height="220dp"
+                android:contentDescription="Código QR de la entrada"
+                tools:src="@mipmap/ic_launcher" />
+
+            <!-- texto indicando que se muestre el QR en el acceso -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Muestra este código en el acceso al evento"
+                android:textSize="13sp"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:alpha="0.7" />
+
+            <!-- separador -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="16dp"
+                android:background="?attr/colorOnSurfaceVariant"
+                android:alpha="0.2" />
+
+            <!-- fecha de compra -->
+            <TextView
+                android:id="@+id/tvPurchaseDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:alpha="0.6"
+                tools:text="Comprado el 28 mar 2026" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

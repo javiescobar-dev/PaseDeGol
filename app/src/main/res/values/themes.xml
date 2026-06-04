@@ -1,0 +1,76 @@
+<!-- light theme -->
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Base.Theme.PaseDeGol" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/green_primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/green_container</item>
+        <item name="colorOnPrimaryContainer">@color/green_dark</item>
+        <item name="colorSecondary">@color/green_dark</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/on_surface</item>
+        <item name="colorOnSurfaceVariant">@color/on_surface_variant</item>
+        <item name="android:colorBackground">@color/background</item>
+        <item name="materialButtonStyle">@style/Widget.PaseDeGol.Button</item>
+        <item name="bottomNavigationStyle">@style/Widget.PaseDeGol.BottomNavigation</item>
+
+        <item name="variant01">@color/light_01</item>
+        <item name="variant02">@color/white</item>
+
+        <!-- splash image style, silenciamos warning de min api -->
+        <item name="android:windowSplashScreenBackground" tools:targetApi="31">@android:color/white</item>
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="31">@drawable/ic_splash_logo_padded</item>
+    </style>
+
+    <style name="Theme.PaseDeGol" parent="Base.Theme.PaseDeGol" />
+
+    <!-- Botón verde redondeado (por defecto) -->
+    <style name="Widget.PaseDeGol.Button"
+        parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/green_primary</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.PaseDeGol.Button</item>
+    </style>
+
+    <!-- boton rojo -->
+    <style name="Widget.PaseDeGol.Button.Destructive"
+        parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/red_primary</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.PaseDeGol.Button</item>
+    </style>
+
+    <!-- boton gris -->
+    <style name="Widget.PaseDeGol.Button.Neutral"
+        parent="Widget.Material3.Button">
+        <item name="backgroundTint">#9E9E9E</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.PaseDeGol.Button</item>
+    </style>
+
+    <!-- Forma redondeada tipo píldora para todos los botones -->
+    <style name="ShapeAppearance.PaseDeGol.Button"
+        parent="ShapeAppearance.Material3.Corner.Full">
+    </style>
+
+    <!-- Simulamos el efecto de MaterialDesign al pulsar la barra de navegacion, que queda mejor -->
+    <style name="Widget.PaseDeGol.BottomNavigation"
+        parent="Widget.Material3.BottomNavigationView">
+        <item name="itemIconTint">@color/bottom_nav_item_color</item>
+        <item name="itemTextColor">@color/bottom_nav_item_color</item>
+        <item name="itemActiveIndicatorStyle">@style/Widget.PaseDeGol.BottomNavigation.ActiveIndicator</item>
+        <item name="itemRippleColor">@android:color/transparent</item>
+        <item name="itemBackground">?attr/selectableItemBackgroundBorderless</item>
+    </style>
+
+    <style name="Widget.PaseDeGol.BottomNavigation.ActiveIndicator"
+        parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@android:color/transparent</item>
+    </style>
+
+    <!-- FAB completamente redondo -->
+    <style name="ShapeAppearanceOverlay.App.Fab.Round" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+</resources>

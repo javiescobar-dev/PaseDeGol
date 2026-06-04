@@ -1,0 +1,4 @@
+<resources>
+    <attr name="variant01" format="color" />
+    <attr name="variant02" format="color" />
+</resources>

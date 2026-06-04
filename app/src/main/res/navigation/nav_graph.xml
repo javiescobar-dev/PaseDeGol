@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.escobar.pasedegol.ui.auth.LoginFragment"
+        android:label="Login"
+        tools:layout="@layout/fragment_login"
+        xmlns:tools="http://schemas.android.com/tools"/>
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.escobar.pasedegol.ui.home.HomeFragment"
+        android:label="Catálogo"
+        tools:layout="@layout/fragment_home"
+        xmlns:tools="http://schemas.android.com/tools"/>
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.escobar.pasedegol.ui.profile.ProfileFragment"
+        android:label="Perfil"
+        tools:layout="@layout/fragment_profile"
+        xmlns:tools="http://schemas.android.com/tools"/>
+
+    <fragment
+        android:id="@+id/ticketFragment"
+        android:name="com.escobar.pasedegol.ui.ticket.TicketFragment"
+        android:label="Mis Entradas"
+        tools:layout="@layout/fragment_ticket"
+        xmlns:tools="http://schemas.android.com/tools"/>
+
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.escobar.pasedegol.ui.about.AboutFragment"
+        android:label="Acerca de"
+        tools:layout="@layout/fragment_about"
+        xmlns:tools="http://schemas.android.com/tools"/>
+
+    <fragment
+        android:id="@+id/adminFragment"
+        android:name="com.escobar.pasedegol.ui.admin.AdminFragment"
+        android:label="Administración"
+        tools:layout="@layout/fragment_admin"
+        xmlns:tools="http://schemas.android.com/tools"/>
+
+</navigation>

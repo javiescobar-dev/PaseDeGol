@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "608907900848",
+    "project_id": "pasedegol-26e8e",
+    "storage_bucket": "pasedegol-26e8e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:608907900848:android:b7e680ca1cff9cfdac0875",
+        "android_client_info": {
+          "package_name": "com.escobar.pasedegol"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "608907900848-6ls4am8u6ckd41phg5shc9orim15ejov.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.escobar.pasedegol",
+            "certificate_hash": "d9916cb447fb5d4d50ae07455b38191d0b4c4b95"
+          }
+        },
+        {
+          "client_id": "608907900848-h5h64a5ab23i00a8t0ngspeul0oirovd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.escobar.pasedegol",
+            "certificate_hash": "bc3b301c4b7ed8b865259efa5c52fba6f09ea7c3"
+          }
+        },
+        {
+          "client_id": "608907900848-nf39lg67anbelrgum5eh8qouspadcvif.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzVMEHqwzq9jygiE5cHMv8sO_oeioKqIc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "608907900848-nf39lg67anbelrgum5eh8qouspadcvif.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

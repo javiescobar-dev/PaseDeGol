@@ -1,0 +1,24 @@
+<!-- dark theme -->
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Base.Theme.PaseDeGol" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/green_primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/green_dark</item>
+        <item name="colorOnPrimaryContainer">@color/green_light</item>
+        <item name="colorSecondary">@color/green_light</item>
+        <item name="colorOnSecondary">@color/on_surface</item>
+        <item name="colorSurface">@color/dark_01</item>
+        <item name="colorOnSurface">@color/white</item>
+        <item name="colorOnSurfaceVariant">@color/surface_dark</item>
+        <item name="android:colorBackground">@color/background_dark</item>
+        <item name="materialButtonStyle">@style/Widget.PaseDeGol.Button</item>
+        <item name="bottomNavigationStyle">@style/Widget.PaseDeGol.BottomNavigation</item>
+
+        <item name="variant01">@color/dark_01</item>
+        <item name="variant02">@color/dark_01</item>
+
+        <!-- splash image style, silenciamos warning de min api -->
+        <item name="android:windowSplashScreenBackground" tools:targetApi="31">@color/dark_01</item>
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="31">@drawable/ic_splash_logo_padded</item>
+    </style>
+</resources>
