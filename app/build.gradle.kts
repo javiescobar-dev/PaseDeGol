@@ -24,6 +24,14 @@ android {
             keyAlias = "androiddebugkey"
             keyPassword = "android"
         }
+
+        // añadimos la configuracion explicita para Produccion
+        create("releaseConfig") {
+            storeFile = file("pasedegol_key_produccion")
+            storePassword = "pasedegol"
+            keyAlias = "llave-produccion"
+            keyPassword = "pasedegol"
+        }
     }
 
     defaultConfig {
@@ -47,6 +55,8 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            // obligar a la version release a usar la llave de produccion
+            signingConfig = signingConfigs.getByName("releaseConfig")
         }
     }
 
@@ -89,6 +99,8 @@ dependencies {
     implementation("com.google.firebase:firebase-storage")
     // Firebase Functions
     implementation("com.google.firebase:firebase-functions-ktx:21.2.1")
+    // Firebase Remote Config
+    implementation("com.google.firebase:firebase-config")
 
     // Google Sign-In
     implementation("com.google.android.gms:play-services-auth:21.5.1")

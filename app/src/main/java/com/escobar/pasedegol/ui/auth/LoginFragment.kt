@@ -30,6 +30,10 @@ import com.escobar.pasedegol.MainActivity
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.material.transition.MaterialFadeThrough
+import com.google.firebase.Firebase
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.remoteConfig
+import com.google.firebase.remoteconfig.remoteConfigSettings
 import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
@@ -47,6 +51,33 @@ class LoginFragment : Fragment() {
     // se inicializa la primera vez que se usa
     private val credentialManager: CredentialManager by lazy {
         CredentialManager.create(requireContext())
+    }
+
+    // cliente de la API clasica
+    private lateinit var googleSignInClient: com.google.android.gms.auth.api.signin.GoogleSignInClient
+
+    // variable para cargar Firebase Remote Config y ver si activamos el Legacy Auth de Google
+    private var googleAuthLegacy: Boolean = false
+
+    // Lanzador para capturar el resultado de la ventana de Google
+    private val googleLegacySignInLauncher = registerForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == android.app.Activity.RESULT_OK) {
+            val task = com.google.android.gms.auth.api.signin.GoogleSignIn.getSignedInAccountFromIntent(result.data)
+            try {
+                val account = task.getResult(com.google.android.gms.common.api.ApiException::class.java)
+                // pasamos el token extraido al metodo existente de Firebase
+                account.idToken?.let { firebaseAuthWithGoogle(it) }
+            } catch (e: com.google.android.gms.common.api.ApiException) {
+                Log.e("Login", "Error en Google Sign In Legacy", e)
+                binding.btnGoogle.isEnabled = true
+                showAlert()
+            }
+        } else {
+            // El usuario ha cancelado o cerrado la ventana
+            binding.btnGoogle.isEnabled = true
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,6 +103,12 @@ class LoginFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
+        // configuramos y descargamos las variables de Firebase Remote Config
+        setupRemoteConfig()
+
+        // configuramos que datos le pedimos a Google (Legacy)
+        setupGoogleLegacySignIn()
+
         // si el usuario ya esta autenticado, redirigir directamente
         auth.currentUser?.let {
             navigateAfterLogin(it.uid)
@@ -87,8 +124,53 @@ class LoginFragment : Fragment() {
 
         // configurar el boton de autenticacion con Google
         binding.btnGoogle.setOnClickListener {
-            launchGoogleSignIn()
+            // obtenemos el valor de Remote Config configurado desde Firebase
+            // para decidir si logueamos con GoogleLegacy o con Google
+            // debido a que actualmente hay un bug de Google con el CredentialManager
+            if (googleAuthLegacy) {
+                launchGoogleSignInLegacy()
+            } else {
+                launchGoogleSignIn()
+            }
         }
+    }
+
+    // metodo para cargar las variables de Firebase Remote Config
+    private fun setupRemoteConfig() {
+
+        val remoteConfig: FirebaseRemoteConfig = Firebase.remoteConfig
+        val configSettings = remoteConfigSettings {
+            minimumFetchIntervalInSeconds = 3600 // No es necesario recargarlo frecuentemente, asi que es aceptable asi
+        }
+        remoteConfig.setConfigSettingsAsync(configSettings)
+
+        // establecer un valor por defecto local por si el usuario no tiene internet
+        remoteConfig.setDefaultsAsync(mapOf("googleAuthModeLegacy" to true))
+
+        // descargar los valores de la nube y activarlos
+        remoteConfig.fetchAndActivate()
+            .addOnCompleteListener(requireActivity()) { task ->
+                if (task.isSuccessful) {
+                    Log.d("RemoteConfig", "Configuración actualizada correctamente")
+                } else {
+                    Log.e("RemoteConfig", "Fallo al obtener la configuración")
+                }
+
+                // asignar el valor descargado (o el por defecto) a la variable global
+                googleAuthLegacy = remoteConfig.getBoolean("googleAuthModeLegacy")
+            }
+    }
+
+    // metodo para configurar la autenticacion con GoogleLegacy
+    private fun setupGoogleLegacySignIn() {
+        val gso = com.google.android.gms.auth.api.signin.GoogleSignInOptions.Builder(
+            com.google.android.gms.auth.api.signin.GoogleSignInOptions.DEFAULT_SIGN_IN
+        )
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        googleSignInClient = com.google.android.gms.auth.api.signin.GoogleSignIn.getClient(requireActivity(), gso)
     }
 
     // metodo para comprobar si hay conexion a internet disponible
@@ -167,6 +249,20 @@ class LoginFragment : Fragment() {
     private fun resetLoginButton() {
         binding.btnLoginRegister.isEnabled = true
         binding.btnLoginRegister.text = "ENTRAR / REGISTRARSE"
+    }
+
+    private fun launchGoogleSignInLegacy() {
+        if (!isNetworkAvailable()) {
+            Toast.makeText(requireContext(), "Sin conexión a Internet", Toast.LENGTH_LONG).show()
+            binding.btnGoogle.isEnabled = true
+            return
+        }
+
+        // cerrar cualquier sesion previa "fantasma" y lanzar el intent
+        googleSignInClient.signOut().addOnCompleteListener {
+            val signInIntent = googleSignInClient.signInIntent
+            googleLegacySignInLauncher.launch(signInIntent)
+        }
     }
 
     // metodo para implementar la logica de login de Google

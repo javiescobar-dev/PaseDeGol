@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "608907900848-6ls4am8u6ckd41phg5shc9orim15ejov.apps.googleusercontent.com",
+          "client_id": "608907900848-1fbauua8crphbl2ib91aases9vsro2dn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.escobar.pasedegol",
+            "certificate_hash": "002c7caae031b8b622dde961272454c8ab3330fe"
+          }
+        },
+        {
+          "client_id": "608907900848-dqt1chqo1v5esd7tb6b82ji813ig195f.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.escobar.pasedegol",
