@@ -124,6 +124,16 @@ class LoginFragment : Fragment() {
 
         // configurar el boton de autenticacion con Google
         binding.btnGoogle.setOnClickListener {
+            // evitar dar muchas veces al boton de inicio de sesion con Google
+            binding.btnGoogle.isEnabled = false
+
+            // verificar conexion a internet antes de intentar autenticar con Google
+            if (!isNetworkAvailable()) {
+                Toast.makeText(requireContext(), "Sin conexión a Internet", Toast.LENGTH_LONG).show()
+                binding.btnGoogle.isEnabled = true
+                return@setOnClickListener
+            }
+
             // obtenemos el valor de Remote Config configurado desde Firebase
             // para decidir si logueamos con GoogleLegacy o con Google
             // debido a que actualmente hay un bug de Google con el CredentialManager
@@ -252,28 +262,32 @@ class LoginFragment : Fragment() {
     }
 
     private fun launchGoogleSignInLegacy() {
-        if (!isNetworkAvailable()) {
-            Toast.makeText(requireContext(), "Sin conexión a Internet", Toast.LENGTH_LONG).show()
-            binding.btnGoogle.isEnabled = true
-            return
-        }
-
         // cerrar cualquier sesion previa "fantasma" y lanzar el intent
         googleSignInClient.signOut().addOnCompleteListener {
-            val signInIntent = googleSignInClient.signInIntent
-            googleLegacySignInLauncher.launch(signInIntent)
+            // comprobamos si el Fragment sigue adjunto a la actividad antes de lanzar la ventana
+            // previene crash al cambiar entre fragments justo en este punto
+            try {
+                // mantener el escudo del ciclo de vida como primera línea de defensa
+                if (lifecycle.currentState.isAtLeast(androidx.lifecycle.Lifecycle.State.RESUMED)) {
+                    val signInIntent = googleSignInClient.signInIntent
+                    googleLegacySignInLauncher.launch(signInIntent)
+                } else {
+                    Log.d("Login", "Login cancelado: El fragmento ya no está activo.")
+                }
+            } catch (e: IllegalStateException) {
+                // si el usuario es mas rapido que el sistema
+                // y el Fragment se destruye en el milisegundo intermedio, capturamos el error
+                Log.w("Login", "El usuario cambió de pantalla durante la carga del Intent. (Race condition evitada)")
+            } catch (e: Exception) {
+                // captura de seguridad generica
+                Log.e("Login", "Error inesperado al lanzar Google Sign In", e)
+            }
         }
     }
 
     // metodo para implementar la logica de login de Google
     // se verifica si se ha seleccionado la cuenta de Google en el dispositivo del usuario
     private fun launchGoogleSignIn() {
-        // verificar conexion a internet antes de intentar autenticar con Google
-        if (!isNetworkAvailable()) {
-            Toast.makeText(requireContext(), "Sin conexión a Internet. Comprueba tu conexión e inténtalo de nuevo.", Toast.LENGTH_LONG).show()
-            return
-        }
-
         // uso de corrutinas para manejar la operacion asincrona
         lifecycleScope.launch {
             try {
@@ -294,31 +308,42 @@ class LoginFragment : Fragment() {
                     context = requireContext()
                 )
 
-                // verificamos si es un CustomCredential y si es del tipo Google ID
-                val credential = result.credential
-                if (credential is CustomCredential && credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
-                    try {
-                        // extraemos el token de los datos del CustomCredential
-                        // se encarga de parsear de forma segura el token que recibes para enviárselo a Firebase.
-                        val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
-                        val googleIdToken = googleIdTokenCredential.idToken
-
-                        // llamamos a Firebase con el token extraído para autenticar al usuario
-                        firebaseAuthWithGoogle(googleIdToken)
-                    } catch (e: Exception) {
-                        Log.e("Login", "Error extrayendo el token de Google", e)
-                    }
-                } else {
-                    Log.e("Login", "Tipo de credencial no reconocido: ${credential.javaClass.name}")
-                }
+                // procesar el resultado exitoso
+                handleSignInResult(result.credential)
             } catch (e: NoCredentialException) {
                 Log.d("Login", "No se ha seleccionado ninguna credencial")
+                binding.btnGoogle.isEnabled = true // rehabilitamos el boton
             } catch (e: GetCredentialCancellationException) {
                 Log.d("Login", "Cancelado por usuario")
+                binding.btnGoogle.isEnabled = true // rehabilitamos el boton
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                // Si la excepcion es porque el Fragment se ha cerrado,
+                // la relanzamos para que la corrutina muera en paz sin pasar por el catch general
+                throw e
             } catch (e: Exception) {
                 Log.e("Login", "Error general", e)
+                binding.btnGoogle.isEnabled = true // rehabilitamos el boton
                 showAlert()
             }
+        }
+    }
+
+    private fun handleSignInResult(credential: androidx.credentials.Credential) {
+        // verificamos si es un CustomCredential y si es del tipo Google ID
+        if (credential is CustomCredential && credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+            try {
+                // extraer el token de los datos del CustomCredential
+                // se encarga de parsear de forma segura el token que recibes para enviarselo a Firebase
+                val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
+                val googleIdToken = googleIdTokenCredential.idToken
+
+                // llamar a Firebase con el token extraido para autenticar al usuario
+                firebaseAuthWithGoogle(googleIdToken)
+            } catch (e: Exception) {
+                Log.e("Login", "Error extrayendo el token de Google", e)
+            }
+        } else {
+            Log.e("Login", "Tipo de credencial no reconocido: ${credential.javaClass.name}")
         }
     }
 
